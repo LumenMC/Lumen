@@ -2,6 +2,7 @@ package net.lumen;
 
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
@@ -27,7 +28,8 @@ public class Main{
 
         InstanceManager instanceManager = server.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+        //instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
+        instanceContainer.setGenerator(new SimpleWorldGen());
         instanceContainer.setChunkSupplier(LightingChunk::new);
 
 
@@ -46,7 +48,8 @@ public class Main{
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             final Player player = event.getPlayer();
             event.setSpawningInstance(instanceContainer);
-            player.setRespawnPoint(new Pos(0, 50, 0));
+            player.setRespawnPoint(new Pos(0, 200, 0));
+            player.setGameMode(GameMode.CREATIVE);
         });
 
 

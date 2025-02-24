@@ -71,6 +71,8 @@ dependencies {
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
     implementation(libs.minestomData)
+    implementation("de.articdive:jnoise-pipeline:4.1.0")
+
 
     // Performance/data structures
     api(libs.fastutil)
@@ -78,8 +80,10 @@ dependencies {
     api(libs.gson)
     implementation(libs.jcTools)
 
+
+
     // Testing
-    testImplementation(libs.bundles.junit)
+    (libs.bundles.junit)
     testImplementation(project(":testing"))
 }
 
