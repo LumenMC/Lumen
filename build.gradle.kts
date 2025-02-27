@@ -72,6 +72,7 @@ dependencies {
     api(libs.bundles.adventure)
     implementation(libs.minestomData)
     implementation("de.articdive:jnoise-pipeline:4.1.0")
+    implementation("org.yaml:snakeyaml:2.0")
 
 
     // Performance/data structures
