@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -27,9 +28,13 @@ public class PluginLoader {
         }
 
         File[] files = pluginsDir.listFiles((dir, name) -> name.endsWith(".jar"));
-        if(files != null) { return;}
 
-        for(File file : files) {
+        if (files == null || files.length == 0) {
+            LOGGER.info("[PluginLoader] No plugins found.");
+            return;
+        }
+
+            for(File file : files) {
 
             try {
 
