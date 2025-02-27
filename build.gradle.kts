@@ -7,6 +7,8 @@ plugins {
     `maven-publish`
     signing
     alias(libs.plugins.nexuspublish)
+    `application`
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 // Read env vars (used for publishing generally)
@@ -73,6 +75,8 @@ dependencies {
     implementation(libs.minestomData)
     implementation("de.articdive:jnoise-pipeline:4.1.0")
     implementation("org.yaml:snakeyaml:2.0")
+    implementation("org.slf4j:slf4j-simple:2.0.9")
+
 
 
     // Performance/data structures
@@ -200,4 +204,26 @@ tasks {
 
         sign(publishing.publications)
     }
+}
+
+tasks.test {
+    enabled = false
+}
+
+application {
+    mainClass.set("net.lumen.LumenServer")
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "net.lumen.LumenServer"
+    }
+}
+
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    archiveBaseName.set("LumenServer")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+    mergeServiceFiles() // Ensures service loader files are merged correctly
 }

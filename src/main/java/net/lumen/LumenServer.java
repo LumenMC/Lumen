@@ -22,6 +22,7 @@ public class LumenServer {
 
         String address = "localhost"; //can be altered
         int port = 25565;
+        MinecraftServer.init();
         server.start(address, port);
         LOGGER.info("[LumenServer] Server started on " + address + ":" + port);
 
