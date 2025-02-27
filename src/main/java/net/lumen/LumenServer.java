@@ -20,7 +20,7 @@ public class LumenServer {
         //Load Plugins
         PluginLoader.loadPlugins();
 
-        String address = "localhost";
+        String address = "localhost"; //can be altered
         int port = 25565;
         server.start(address, port);
         LOGGER.info("[LumenServer] Server started on " + address + ":" + port);
