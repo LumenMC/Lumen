@@ -10,22 +10,19 @@ import java.util.logging.Logger;
 public class LumenServer {
 
     private static final Logger LOGGER = Logger.getLogger("LumenServer");
-    private static MinecraftServer server;
-    private static GlobalEventHandler globalEventHandler;
+
 
     public static void main(String[] args) {
 
         LOGGER.info("[LumenServer] Starting server...");
-
         //Initialize Minestom Server
-        server = new MinecraftServer();
+        MinecraftServer server = new MinecraftServer();
 
 
         String address = "localhost"; //can be altered
         int port = 25565;
 
         MinecraftServer.init();
-        globalEventHandler = server.getGlobalEventHandler();
 
         //Load Plugins
         PluginLoader.loadPlugins();
@@ -43,11 +40,4 @@ public class LumenServer {
 
     }
 
-    public static MinecraftServer getServer() {
-        return server;
-    }
-
-    public static GlobalEventHandler getGlobalEventHandler() {
-        return globalEventHandler;
-    }
 }
