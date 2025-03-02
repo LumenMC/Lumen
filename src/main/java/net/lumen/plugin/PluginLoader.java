@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PluginLoader {
 
     private static final Map<String, Plugin> plugins = new HashMap<>();
-    private static Logger LOGGER = Logger.getLogger("PluginLoader");
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginLoader.class);
     private static final File pluginsDir = new File("plugins");
 
     public static void loadPlugins() {
@@ -40,7 +40,7 @@ public class PluginLoader {
 
                 String mainClassName = getMainClass(file); //get main class from plugin.yml
                 if(mainClassName == null) {
-                    LOGGER.warning("[PluginLoader] No 'main' class found in plugin.yml for " + file.getName());
+                    LOGGER.warn("[PluginLoader] No 'main' class found in plugin.yml for " + file.getName());
                     continue;//skips invalid plugin
 
                 }
@@ -53,7 +53,7 @@ public class PluginLoader {
                 //Load main class of plugin
                 Class<?> mainClass = Class.forName(mainClassName, true, classLoader);
                 if(!Plugin.class.isAssignableFrom(mainClass)) {
-                    LOGGER.warning("[PluginLoader] Main class does not extend Plugin: " + mainClass);
+                    LOGGER.warn("[PluginLoader] Main class does not extend Plugin: " + mainClass);
                     continue; //skips invalid plugin
                 }
 
@@ -65,7 +65,7 @@ public class PluginLoader {
 
 
             }catch (Exception e) {
-                LOGGER.warning("[PluginLoader] Failed to load plugin: " + file.getName());
+                LOGGER.warn("[PluginLoader] Failed to load plugin: " + file.getName());
                 e.printStackTrace();
             }
 
@@ -98,7 +98,7 @@ public class PluginLoader {
                 entry.getValue().onDisable();
                 LOGGER.info("[PluginLoader] Disabled plugin: " + entry.getKey());
             }catch (Exception e) {
-                LOGGER.warning("[PluginLoader] Failed to disable plugin: " + entry.getKey());
+                LOGGER.warn("[PluginLoader] Failed to disable plugin: " + entry.getKey());
                 e.printStackTrace();
             }
         }

@@ -3,13 +3,13 @@ package net.lumen;
 
 import net.lumen.plugin.PluginLoader;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.GlobalEventHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
 
 public class LumenServer {
 
-    private static final Logger LOGGER = Logger.getLogger("LumenServer");
+    private static final Logger LOGGER = LoggerFactory.getLogger(LumenServer.class);
 
 
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class LumenServer {
         MinecraftServer server = new MinecraftServer();
 
 
-        String address = "localhost"; //lets go!
+        String address = "localhost";
         int port = 25565;
 
         MinecraftServer.init();

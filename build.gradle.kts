@@ -72,12 +72,15 @@ dependencies {
     api(libs.slf4j)
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
+
     implementation(libs.minestomData)
-    implementation("de.articdive:jnoise-pipeline:4.1.0")
     implementation("org.yaml:snakeyaml:2.0")
-    implementation("org.slf4j:slf4j-simple:2.0.9")
 
 
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("org.apache.logging.log4j:log4j-core:2.21.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.21.1")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.21.1")
 
     // Performance/data structures
     api(libs.fastutil)
