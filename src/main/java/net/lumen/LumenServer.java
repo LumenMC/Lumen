@@ -15,6 +15,7 @@ public class LumenServer {
     public static void main(String[] args) {
 
         LOGGER.info("[LumenServer] Starting server...");
+
         //Initialize Minestom Server
         MinecraftServer server = new MinecraftServer();
 
