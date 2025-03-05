@@ -19,7 +19,7 @@ public class LumenServer {
         MinecraftServer server = new MinecraftServer();
 
 
-        String address = "localhost";//will be updated in re-write
+        String address = "localhost";//will be updated
         int port = 25565;
 
         MinecraftServer.init();
