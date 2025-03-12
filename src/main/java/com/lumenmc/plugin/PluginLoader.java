@@ -1,5 +1,7 @@
 package com.lumenmc.plugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +13,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PluginLoader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginLoader.class);
+    private static final String prefix = "[LumenServer] ";
+
     private PluginLoader() {}
 
     public static class Holder{
@@ -23,13 +28,13 @@ public class PluginLoader {
 
     public PluginDescriptionFile getPluginDescriptionFile(File jarFile) throws IOException {
         try (JarFile jar = new JarFile(jarFile)) {
-            JarEntry entry = jar.getJarEntry("plugin.yml");
-            if (entry == null) {
-                throw new IOException("Could not find plugin.yml in " + jarFile);
+            JarEntry jarEntry = jar.getJarEntry("plugin.yml");
+            if (jarEntry == null) {
+                LOGGER.error(prefix+"Could not find plugin.yml in {}", jarFile);
             }
 
-            try (InputStream in = jar.getInputStream(entry)) {
-                return new PluginDescriptionFile(in);
+            try (InputStream yamlInputStream = jar.getInputStream(jarEntry)) {
+                return new PluginDescriptionFile(yamlInputStream);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -47,8 +52,7 @@ public class PluginLoader {
                 descriptions.put(desc.getName(), desc);
                 pluginFiles.put(desc.getName(), jarFile);
             }catch(Exception e){
-                System.out.println("Error loading plugin file " + jarFile.getName());
-                e.printStackTrace();
+                LOGGER.error(prefix+"Error loading plugin file {}", jarFile.getName(), e);
             }
         }
         return descriptions;
@@ -62,15 +66,11 @@ public class PluginLoader {
                 PluginDescriptionFile desc = PluginLoader.getInstance().getPluginDescriptionFile(jarFile);
                 pluginFiles.put(desc.getName(), jarFile);
             }catch(Exception e){
-                System.out.println("Error loading plugin file " + jarFile.getName());
-                e.printStackTrace();
+                LOGGER.error(prefix+"Error loading plugin file {}", jarFile.getName(), e);
             }
         }
         return pluginFiles;
     }
-
-
-
 
     public Plugin loadPlugin(File jarFile) throws IOException, ClassNotFoundException {
         PluginDescriptionFile desc = getPluginDescriptionFile(jarFile);

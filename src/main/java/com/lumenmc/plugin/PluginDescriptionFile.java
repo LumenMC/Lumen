@@ -1,6 +1,7 @@
 package com.lumenmc.plugin;
 
 import org.yaml.snakeyaml.Yaml;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
@@ -11,15 +12,15 @@ public class PluginDescriptionFile {
     private final String name, version, mainClass;
     public final List<String> depend, softDepend;
 
-    public PluginDescriptionFile(InputStream yamlStream) throws Exception {
+    public PluginDescriptionFile(InputStream yamlStream) throws IOException {
         if(yamlStream == null) {
-            throw new Exception("YAML stream is null");
+            throw new IOException("YAML stream is null");
         }
         Yaml yaml = new Yaml();
         Map<String, Object> config = yaml.load(yamlStream);
         this.name = getString(config,"name","Example Plugin");
         this.version = getString(config,"version","1.0.0");
-        this.mainClass = getString(config,"mainClass","ExampleClass");
+        this.mainClass = getString(config,"main","ExampleClass");
         this.depend = getStringList(config, "depend");
         this.softDepend = getStringList(config, "softDepend");
     }

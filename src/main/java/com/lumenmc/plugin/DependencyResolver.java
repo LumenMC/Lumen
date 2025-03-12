@@ -1,8 +1,13 @@
 package com.lumenmc.plugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class DependencyResolver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DependencyResolver.class);
+    private static final String prefix = "[LumenServer] ";
+
     public static List<String> getLoadOrder(Map<String, PluginDescriptionFile> plugins) {
         Map<String, List<String>> graph = new HashMap<>();
         Map<String, Integer> inDegree = new HashMap<>();
@@ -23,7 +28,7 @@ public class DependencyResolver {
 
             for (String dep : plugin.getDepend()) {
                 if (!plugins.containsKey(dep)) {
-                    throw new IllegalArgumentException("Missing required dependency: " + dep);
+                    LOGGER.error(prefix+"Missing required dependency: {}", dep);
                 }
                 graph.get(dep).add(pluginName);
                 inDegree.put(pluginName, inDegree.get(pluginName) + 1);
@@ -99,7 +104,7 @@ public class DependencyResolver {
 
         // Detect cycles
         if (loadOrder.size() != plugins.size()) {
-            throw new IllegalStateException("Cycle detected in dependencies, cannot resolve load order.");
+            LOGGER.error(prefix+"Cycle detected in dependencies, cannot resolve load order.");
         }
 
         return loadOrder;

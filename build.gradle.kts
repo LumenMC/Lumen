@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import java.time.Duration
 
 plugins {
@@ -214,19 +215,29 @@ tasks.test {
 }
 
 application {
-    mainClass.set("net.lumen.LumenServer")
+    mainClass.set("com.lumenmc.server.LumenServer")
 }
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "net.lumen.LumenServer"
+        attributes["Main-Class"] = "com.lumenmc.server.LumenServer"
     }
 }
 
 
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+tasks.withType<ShadowJar> {
     archiveBaseName.set("LumenServer")
     archiveClassifier.set("")
     archiveVersion.set("")
     mergeServiceFiles() // Ensures service loader files are merged correctly
+}
+
+val copyShadowJar by tasks.registering(Copy::class) {
+    dependsOn(tasks.withType<ShadowJar>())
+    from(tasks.named<ShadowJar>("shadowJar").map { it.archiveFile })
+    into(file("E:/Lumen"))
+}
+
+tasks.withType<ShadowJar> {
+    finalizedBy(copyShadowJar)
 }

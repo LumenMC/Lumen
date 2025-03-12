@@ -1,5 +1,8 @@
 package com.lumenmc.plugin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PluginManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PluginManager.class);
+    private static final String prefix = "[LumenServer] ";
+
     private PluginManager(){}
 
     private static class Holder{
@@ -24,29 +30,29 @@ public class PluginManager {
 
     public void loadPlugins(File pluginsFolder) throws IOException {
         if(!pluginsFolder.exists() || !pluginsFolder.isDirectory()){
-            System.out.println("Plugins folder does not exist or is not a directory");
+            LOGGER.error(prefix+"Plugins folder does not exist or is not a directory");
             return;
         }
 
         Map<String, PluginDescriptionFile> descriptions = loader.getDescriptions(pluginsFolder);
         Map<String, File> pluginFiles = loader.getPluginFiles(pluginsFolder);
-
         loadOrder = DependencyResolver.getLoadOrder(descriptions);
 
         for(String pluginName : loadOrder){
             File jarFile = pluginFiles.get(pluginName);
-            if(jarFile == null){continue;}
+            if(jarFile == null){
+                continue;
+            }
 
             try {
                 Plugin plugin = loader.loadPlugin(jarFile);
                 if(plugin != null){
                     plugins.put(pluginName, plugin);
-                    System.out.println("Loaded plugin " + pluginName);
+                    LOGGER.info(prefix+"Loading plugin {}", pluginName);
                     plugin.onLoad();
                 }
             }catch(Exception e){
-                System.out.println("Error loading plugin " + pluginName);
-                e.printStackTrace();
+                LOGGER.error(prefix+"Failed to load plugin {}", pluginName, e);
             }
         }
     }
@@ -55,7 +61,7 @@ public class PluginManager {
         for(String pluginName : loadOrder){
             Plugin plugin = plugins.get(pluginName);
             if(plugin != null){
-                System.out.println("Enabling plugin " + pluginName);
+                LOGGER.info(prefix+"Enabling plugin {}", pluginName);
                 plugin.onEnable();
             }
         }
@@ -65,7 +71,7 @@ public class PluginManager {
         for(int i = loadOrder.size() - 1; i >= 0; i--){
             Plugin plugin = plugins.get(loadOrder.get(i));
             if(plugin != null){
-                System.out.println("Disabling plugin " + loadOrder.get(i));
+                LOGGER.info(prefix+"Disabling plugin {}", loadOrder.get(i));
                 plugin.onDisable();
             }
         }
